@@ -29,6 +29,15 @@ public class Book {
 	protected Book() {
 		
 	}
+	public Book(String isbn, String title, Author author, Publisher publisher) {
+		super();
+		this.isbn = isbn;
+		this.title = title;
+		this.author = author;
+		this.publisher = publisher;
+	}
+
+
 
 	/**
 	 * @return the id
