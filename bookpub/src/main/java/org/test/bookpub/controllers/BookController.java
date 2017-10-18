@@ -2,6 +2,8 @@ package org.test.bookpub.controllers;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -32,12 +34,18 @@ public class BookController {
 
 	@RequestMapping(value = "/{isbn}", method = RequestMethod.GET)
 	public Book getBook(@PathVariable Isbn isbn) {
-		return bookRepository.findBookByIsbn(isbn.getIsbn());
+		Book book = bookRepository.findBookByIsbn(isbn.getIsbn());
+		return book;
 	}
 
 	@RequestMapping(value = "/{isbn}/reviewers", method = RequestMethod.GET)
 	public List<Reviewer> getReviewers(@PathVariable("isbn") Book book) {
 		return book.getReviewers();
+	}
+
+	@RequestMapping(value = "/sesion", method = RequestMethod.GET)
+	public String getSessionId(HttpServletRequest request) {
+		return request.getSession().getId();
 	}
 
 }
