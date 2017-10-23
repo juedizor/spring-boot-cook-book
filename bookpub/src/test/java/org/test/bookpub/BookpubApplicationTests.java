@@ -2,7 +2,11 @@ package org.test.bookpub;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
+import java.util.List;
+
+import org.assertj.core.util.Lists;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -29,7 +37,7 @@ public class BookpubApplicationTests {
 	@Autowired
 	private WebApplicationContext context;
 	@Autowired
-	private BookRepository bookReository;
+	private BookRepository bookRepository;
 	@LocalServerPort
 	private int port;
 
@@ -43,7 +51,16 @@ public class BookpubApplicationTests {
 
 	@Test
 	public void contextLoads() {
-		assertEquals(1, bookReository.count());
+		assertEquals(1, bookRepository.count());
+	}
+
+	@Test
+	public void getAllBooktest() {
+		ResponseEntity<Iterable<Book>> iter = restTemplate.exchange("http://localhost:" + port + "/books/",
+				HttpMethod.GET, HttpEntity.EMPTY, new ParameterizedTypeReference<Iterable<Book>>() {
+				});
+		List<Book> list = Lists.newArrayList(iter.getBody());
+		assertTrue(list != null && !list.isEmpty());
 	}
 
 	@Test
@@ -55,11 +72,11 @@ public class BookpubApplicationTests {
 
 	@Test
 	public void webappPublisherApi() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.get("/publisher/1")).andExpect(MockMvcResultMatchers.status().isOk())
-				.andExpect(
-						MockMvcResultMatchers.content().contentType(MediaType.parseMediaType("application/hal+json")))
+		mockMvc.perform(MockMvcRequestBuilders.get("/books/978-1-78528-415-1"))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
 				.andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("Packt")))
-				.andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Packt"));
+				.andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Spring Boot Recipe"));
 
 	}
 

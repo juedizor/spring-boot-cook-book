@@ -12,9 +12,9 @@ public class BookpubApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(BookpubApplication.class, args);
 	}
-	
+
 	@Bean
-	public StartupRunner schedulerRunner(){
+	public StartupRunner schedulerRunner() {
 		return new StartupRunner();
 	}
 }

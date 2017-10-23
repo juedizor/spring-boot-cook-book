@@ -6,15 +6,15 @@ import javax.persistence.Id;
 
 @Entity
 public class Reviewer {
-	
+
 	@Id
 	@GeneratedValue
 	private long id;
 	private String firstName;
 	private String lastName;
-	
-	protected Reviewer(){
-	
+
+	protected Reviewer() {
+
 	}
 
 	/**
@@ -35,7 +35,8 @@ public class Reviewer {
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param id
+	 *            the id to set
 	 */
 	public void setId(long id) {
 		this.id = id;
@@ -49,7 +50,8 @@ public class Reviewer {
 	}
 
 	/**
-	 * @param firstName the firstName to set
+	 * @param firstName
+	 *            the firstName to set
 	 */
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
@@ -63,15 +65,11 @@ public class Reviewer {
 	}
 
 	/**
-	 * @param lastName the lastName to set
+	 * @param lastName
+	 *            the lastName to set
 	 */
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-	
-	
-	
-	
-	
 
 }

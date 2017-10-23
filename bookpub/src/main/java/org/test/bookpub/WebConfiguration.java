@@ -192,7 +192,6 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
 		}
 	}
 
-	@Bean
 	public EmbeddedServletContainerFactory servletContainer(TomcatSslConnectorProperties properties) {
 		TomcatEmbeddedServletContainerFactory tomcat = new TomcatEmbeddedServletContainerFactory();
 		tomcat.addAdditionalTomcatConnectors(createSslConnector(properties));
