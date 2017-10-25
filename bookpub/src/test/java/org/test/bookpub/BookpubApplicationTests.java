@@ -72,12 +72,11 @@ public class BookpubApplicationTests {
 
 	@Test
 	public void webappPublisherApi() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.get("/books/978-1-78528-415-1"))
+		mockMvc.perform(MockMvcRequestBuilders.post("/books/978-1-78528-415-1"))
 				.andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8))
 				.andExpect(MockMvcResultMatchers.content().string(Matchers.containsString("Packt")))
 				.andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Spring Boot Recipe"));
-
 	}
 
 }

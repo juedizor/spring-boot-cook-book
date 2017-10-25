@@ -32,7 +32,7 @@ public class BookController {
 		return bookRepository.findAll();
 	}
 
-	@RequestMapping(value = "/{isbn}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{isbn}", method = RequestMethod.POST)
 	public Book getBook(@PathVariable Isbn isbn) {
 		Book book = bookRepository.findBookByIsbn(isbn.getIsbn());
 		return book;
