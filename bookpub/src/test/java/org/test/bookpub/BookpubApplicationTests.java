@@ -6,6 +6,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.assertj.core.util.Lists;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -20,6 +22,8 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -31,27 +35,40 @@ import org.test.bookpub.entity.Book;
 import org.test.bookpub.repository.BookRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = BookpubApplication.class)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class BookpubApplicationTests {
 
 	@Autowired
 	private WebApplicationContext context;
 	@Autowired
 	private BookRepository bookRepository;
+	@Autowired
+	private DataSource ds;
 	@LocalServerPort
 	private int port;
 
 	private MockMvc mockMvc;
 	private RestTemplate restTemplate = new RestTemplate();
+	private static boolean loadDataFixtures = true;
 
 	@Before
 	public void setupMockMvc() {
 		mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
 	}
 
+	@Before
+	public void loadDataFixture() {
+		if (loadDataFixtures) {
+			ResourceDatabasePopulator populator = new ResourceDatabasePopulator(
+					context.getResource("classpath:/test-data.sql"));
+			DatabasePopulatorUtils.execute(populator, ds);
+			loadDataFixtures = false;
+		}
+	}
+
 	@Test
 	public void contextLoads() {
-		assertEquals(1, bookRepository.count());
+		assertEquals(3, bookRepository.count());
 	}
 
 	@Test
